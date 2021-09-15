@@ -21,6 +21,7 @@ phases:
 
   post_build:
     commands:
+      - $(aws ecr get-login --no-include-email --region $AWS_REGION)
       - docker push $REPOSITORY:$TAG
       - CREDENTIALS=$(aws sts assume-role --role-arn $EKS_KUBECTL_ROLE_ARN --role-session-name codebuild-kubectl --duration-seconds 900)
       - export AWS_ACCESS_KEY_ID="$(echo ${CREDENTIALS} | jq -r '.Credentials.AccessKeyId')"

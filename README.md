@@ -1,3 +1,6 @@
+This demo use Codepipeline to update an EKS cluster!
+Good referencing: https://itnext.io/continuous-deployment-to-kubernetes-eks-using-aws-codepipeline-aws-codecommit-and-aws-codebuild-fce7d6c18e83
+
 Remarks
 (1) To allow build docker image by CodeBuild, enable "Privilaged" is required in the Environment setup
 ![image](https://user-images.githubusercontent.com/33850004/133379569-9e74c85b-34cc-4452-9133-dda326934f6d.png)

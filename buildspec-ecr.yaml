@@ -1,9 +1,8 @@
----
 version: 0.2
 phases:
    install:
       runtime-versions:
-         python: 3.8
+         nodejs: latest
     
       commands:
          #- echo Logging in to Amazon ECR...
@@ -13,22 +12,28 @@ phases:
          #- chmod +x ./kubectl ./aws-iam-authenticator
          #- export PATH=$PWD/:$PATH
          - echo "build..."
-         - echo "Installing dependencies..."
-         - pip install -r software.txt -t . # -t . = install in the current director
+         - yarn install
    pre_build:
       commands:
-         - TAG="$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
+         - echo "Entered pre_build phase"
+         - echo "Logging in to Amazon ECR..."
          #- sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY:$TAG"'@' Kubernetes/eks-deployment.yaml
-         #- $(aws ecr get-login --no-include-email --region $AWS_REGION)
+         - $(aws ecr get-login --no-include-email --region $AWS_REGION)
          #- export KUBECONFIG=$HOME/.kube/config
+         - yarn clean
+         - yarn build
    build:
       commands:
+         - echo "Entered build phase"
+         - echo "Build the docker image and tag..."
+         - TAG="$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
          - docker build --tag $REPOSITORY:$TAG .
 
    post_build:
       commands:
-         - $(aws ecr get-login --no-include-email --region $AWS_REGION)
-         - docker push $REPOSITORY:$TAG
+         - echo "Entered post_build phase"
+         - echo "Pushing the docker image"
+         - docker push $REPOSITORY
          #- CREDENTIALS=$(aws sts assume-role --role-arn $EKS_KUBECTL_ROLE_ARN --role-session-name codebuild-kubectl --duration-seconds 900)
          #- export AWS_ACCESS_KEY_ID="$(echo ${CREDENTIALS} | jq -r '.Credentials.AccessKeyId')"
          #- export AWS_SECRET_ACCESS_KEY="$(echo ${CREDENTIALS} | jq -r '.Credentials.SecretAccessKey')"

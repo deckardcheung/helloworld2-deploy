@@ -13,7 +13,7 @@ phases:
       commands:
         - TAG="$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
         - sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY:$TAG"'@' Kubernetes/eks-deployment.yaml
-        - $(aws ecr get-login --no-include-email)
+        - $(aws ecr get-login --no-include-email --region $AWS_REGION)
         - export KUBECONFIG=$HOME/.kube/config
   build:
     commands:

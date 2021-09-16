@@ -2,7 +2,7 @@ version: 0.2
 phases:
   install:
     commands:
-      - echo Logging in to Amazon ECR...
+      echo "Install app dependencies"
       #- $(aws ecr get-login --no-include-email --region $AWS_REGION)
       - curl -sS -o aws-iam-authenticator https://amazon-eks.s3.us-west-2.amazonaws.com/1.19.6/2021-01-05/bin/linux/amd64/aws-iam-authenticator
       - curl -sS -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.20.4/2021-04-12/bin/linux/amd64/kubectl
@@ -10,7 +10,7 @@ phases:
       - export PATH=$PWD/:$PATH
   pre_build:
       commands:
-        - TAG="$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
+        #- TAG="$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
         - sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY:$TAG"'@' Kubernetes/eks-deployment.yaml
         - $(aws ecr get-login --no-include-email --region $AWS_REGION)
         - export KUBECONFIG=$HOME/.kube/config

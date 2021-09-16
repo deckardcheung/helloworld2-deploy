@@ -2,7 +2,7 @@ version: 0.2
 phases:
    install:
       runtime-versions:
-         nodejs: latest
+         python: 3.8
     
       commands:
          #- echo Logging in to Amazon ECR...
@@ -12,7 +12,7 @@ phases:
          #- chmod +x ./kubectl ./aws-iam-authenticator
          #- export PATH=$PWD/:$PATH
          - echo "build..."
-         - yarn install
+         - pip install -r software.txt -t . # -t . = install in the current directory
    pre_build:
       commands:
          - echo "Entered pre_build phase"
@@ -20,8 +20,7 @@ phases:
          #- sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY:$TAG"'@' Kubernetes/eks-deployment.yaml
          - $(aws ecr get-login --no-include-email --region $AWS_REGION)
          #- export KUBECONFIG=$HOME/.kube/config
-         - yarn clean
-         - yarn build
+
    build:
       commands:
          - echo "Entered build phase"

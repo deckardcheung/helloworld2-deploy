@@ -23,7 +23,7 @@ phases:
       - echo "Amend the correct image name in Kubernetes/eks-demployment.yaml"
       - sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY:$TAG"'@' Kubernetes/eks-deployment.yaml
       #- export KUBECONFIG=$HOME/.kube/config
-      - echo "Running eksctl.."
+      - echo "Edit configmap by eksctl..."
       - eksctl create iamidentitymapping --cluster $EKS_CLUSTER_NAME --arn $CB_EKS_ROLE_ARN --group system:masters --username $CB_EKS_ROLE_NAME
   build:
     commands:

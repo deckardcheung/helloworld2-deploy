@@ -24,7 +24,7 @@ phases:
       - sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY:$TAG"'@' Kubernetes/eks-deployment.yaml
       #- export KUBECONFIG=$HOME/.kube/config
       - echo "Running eksctl.."
-      - eksctl create iamidentitymapping --cluster $EKS_CLUSTER_NAME --arn $CODEBUILD_EKS_ROLE --group system:masters --username $CODEBUILD_EKS_ROLE_NAME
+      - eksctl create iamidentitymapping --cluster $EKS_CLUSTER_NAME --arn $CB_EKS_ROLE --group system:masters --username $CB_EKS_ROLE_NAME
   build:
     commands:
       - echo "Entered the build phase..."

@@ -10,7 +10,21 @@ Remarks
 also includes<br>
 $TAG:latest<br><br>
 
-(3) Dev > CodeBuild Role > +policy: AmazonEC2ContainerRegistryPowerUser <br>
+(3) Dev > CodeBuild Role ><br>
+    +policy: AmazonEC2ContainerRegistryPowerUser <br>
+    +policy into the base policy<br>
+    {
+    "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:CompleteLayerUpload",
+        "ecr:GetAuthorizationToken",
+        "ecr:InitiateLayerUpload",
+        "ecr:PutImage",
+        "ecr:UploadLayerPart"
+    ],
+    "Resource": "*",
+    "Effect": "Allow"
+}
 (4) Deploy > CodeBuild Role > +New inline policy: Name: EKSClusterAccess <br>
     {
     "Version": "2012-10-17",

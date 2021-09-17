@@ -16,6 +16,8 @@ phases:
    pre_build:
       commands:
          - echo "Entered pre_build phase"
+         - echo "Logging in to Amazon ECR..."
+         - $(aws ecr get-login --no-include-email --region $AWS_REGION)
          #- sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY:$TAG"'@' Kubernetes/eks-deployment.yaml
          #- export KUBECONFIG=$HOME/.kube/config
 
@@ -30,8 +32,6 @@ phases:
    post_build:
       commands:
          - echo "Entered post_build phase"
-         - echo "Logging in to Amazon ECR..."
-         - $(aws ecr get-login-password --region $AWS_REGION)
          - echo "Pushing the docker image"
          - docker push $REPOSITORY:$TAG
          #- CREDENTIALS=$(aws sts assume-role --role-arn $EKS_KUBECTL_ROLE_ARN --role-session-name codebuild-kubectl --duration-seconds 900)

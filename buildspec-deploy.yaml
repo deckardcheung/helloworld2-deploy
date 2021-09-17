@@ -9,9 +9,15 @@ phases:
       - chmod +x ./kubectl ./aws-iam-authenticator
       - export PATH=$PWD/:$PATH
   pre_build:
-      commands:
-        #- TAG="$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
-        - sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY:$TAG"'@' Kubernetes/eks-deployment.yaml
+    commands:
+      - echo "Entered the pre_build phase..."
+      - echo "Logging in to Amazon EKS..."
+      - aws eks --region $AWS_REGION update-kubeconfig --name $EKS_CLUSTER_NAME
+      - echo "Logging in to ECR..."
+      - $(aws ecr get-login --no-include-email --region $AWS_REGION)
+      #- TAG="$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
+      - echo "Amend the correct image name in Kubernetes/eks-demployment.yaml"
+      - sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY:$TAG"'@' Kubernetes/eks-deployment.yaml
         #- $(aws ecr get-login --no-include-email --region $AWS_REGION)
         - export KUBECONFIG=$HOME/.kube/config
   build:

@@ -23,10 +23,12 @@ phases:
       - echo "Amend the correct image name in Kubernetes/eks-demployment.yaml"
       - sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY:$TAG"'@' Kubernetes/eks-deployment.yaml
       #- export KUBECONFIG=$HOME/.kube/config
+      - echo "Running eksctl.."
+      - eksctl create iamidentitymapping --cluster $EKS_CLUSTER_NAME --arn $CODEBUILD_EKS_ROLE --group system:masters --username $CODEBUILD_EKS_ROLE_NAME
   build:
     commands:
       - echo "Entered the build phase..."
-      - echo " Push the latest image to cluster"
+      #- echo " Push the latest image to cluster"
       - kubectl apply -f Kubernetes/eks-deployment.yaml
   #post_build:
     #commands:

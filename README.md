@@ -7,6 +7,8 @@ Remarks
 
 (2) Build env reference setup (co-relate with buildspec.yaml)
 ![image](https://user-images.githubusercontent.com/33850004/133384357-f3e2ad8d-b100-4802-9966-d5c60da3350d.png)
+also includes<br>
+$TAG:latest<br><br>
 
 (3) Dev > CodeBuild Role > +policy: AmazonEC2ContainerRegistryPowerUser <br>
 (4) Deploy > CodeBuild Role > +New inline policy: Name: EKSClusterAccess <br>

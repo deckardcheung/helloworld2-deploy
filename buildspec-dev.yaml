@@ -25,7 +25,8 @@ phases:
       commands:
          - echo "Entered build phase"
          - echo "Build the docker image and tag..."
-         - TAG="$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
+         #To be investigated if below dynamic tagging to yield and keep mulitple versions of an image in future@210917
+         #- TAG="$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
          - docker build --tag $REPOSITORY:$TAG .
 
    post_build:

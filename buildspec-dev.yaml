@@ -18,7 +18,7 @@ phases:
          - echo "Entered pre_build phase"
          - echo "Logging in to Amazon ECR..."
          #- sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY:$TAG"'@' Kubernetes/eks-deployment.yaml
-         - aws ecr get-login-password --region $AWS_REGION
+         - $(aws ecr get-login --no-include-email --region $AWS_REGION)
          #- export KUBECONFIG=$HOME/.kube/config
 
    build:

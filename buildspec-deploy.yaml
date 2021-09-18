@@ -19,7 +19,7 @@ phases:
     commands:
       - echo "Entered the pre_build phase..."
       - echo "Logging in to Amazon EKS..."
-      - aws eks --region $AWS_REGION update-kubeconfig --name $EKS_CLUSTER_NAME --role-arn $CB_EKS_ROLE_ARN
+      - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION --role-arn $CB_EKS_ROLE_ARN
       - echo "Logging in to ECR..."
       - $(aws ecr get-login --no-include-email --region $AWS_REGION)
       #- TAG="$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"

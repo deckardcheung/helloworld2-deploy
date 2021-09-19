@@ -23,13 +23,17 @@ phases:
       #- TAG="$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
       - echo "Amend the correct image name in Kubernetes/eks-demployment.yaml"
       - sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY:$TAG"'@' Kubernetes/eks-deployment.yaml
-      #- export KUBECONFIG=$HOME/.kube/config
-      - echo "Logging in to Amazon EKS..."
-      - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION --role-arn $EKS_CLUSTER_ROLE_ARN
+      - echo "Get EKS cluster credentials..."
+      - CREDENTIALS=$(aws sts assume-role --role-arn $EKS_CLUSTER_ROLE_ARN --role-session-name codebuild-kubectl --duration-seconds 900)
+      - export AWS_ACCESS_KEY_ID="$(echo ${CREDENTIALS} | jq -r '.Credentials.AccessKeyId')"
+      - export AWS_SECRET_ACCESS_KEY="$(echo ${CREDENTIALS} | jq -r '.Credentials.SecretAccessKey')"
+      - export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
+      #- export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
+      - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME
       - echo "Check config..."
       - kubectl config view --minify
-      - echo "Update configmap with aws-auth.yaml"
-      - kubectl apply -f aws-auth.yaml
+      #- echo "Update configmap with aws-auth.yaml"
+      #- kubectl apply -f aws-auth.yaml
       #- echo "Check kubectl access..."
       #- kubectl get svc
       #- echo "Edit configmap by eksctl..."
@@ -37,7 +41,6 @@ phases:
   build:
     commands:
       - echo "Entered the build phase..."
-      #- echo " Push the latest image to cluster"
       - kubectl apply -f Kubernetes/eks-deployment.yaml
   #post_build:
     #commands:

@@ -32,8 +32,8 @@ phases:
       - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME
       #- echo "Check config..."
       #- kubectl config view --minify
-      #- echo "Update configmap with aws-auth.yaml"
-      #- kubectl apply -f aws-auth.yaml
+      - echo "Update configmap with aws-auth.yaml"
+      - kubectl apply -f aws-auth.yaml
       #- echo "Edit configmap by eksctl..."
       #- eksctl create iamidentitymapping --cluster $EKS_CLUSTER_NAME --arn $CB_EKS_ROLE_ARN --group system:masters --username $CB_EKS_ROLE_NAME
   build:

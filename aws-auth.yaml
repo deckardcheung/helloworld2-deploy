@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aws-auth
+  namespace: kube-system
+data:
+  mapRoles: |
+    - rolearn: arn:aws:iam::169795540042:role/eks-ap-east-1-helloworld2-service-role
+      username: system:node:{{EC2PrivateDNSName}}
+      groups:
+        - system:bootstrappers
+        - system:nodes
+    - rolearn: arn:aws:iam::169795540042:role/service-role/codebuild-helloworld2-deploy-service-role
+      username: codebuild-helloworld2-deploy-service-role
+      groups:
+        - system:masters

@@ -25,7 +25,7 @@ phases:
       - sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY:$TAG"'@' Kubernetes/eks-deployment.yaml
       #- export KUBECONFIG=$HOME/.kube/config
       - echo "Logging in to Amazon EKS..."
-      - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION #--role-arn $CB_EKS_ROLE_ARN
+      - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION --role-arn $EKS_CLUSTER_ROLE_ARN
       - echo "Check config..."
       - kubectl config view --minify
       #- echo "Check kubectl access..."
